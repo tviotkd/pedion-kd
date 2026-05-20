@@ -12,7 +12,7 @@
 <script>
   const OFFICE_CONFIG = {
     emailjs_service_id:  'service_md105q6',
-    emailjs_template_id: 'template_lw08y8b',
+    emailjs_template_id: 'template_4rcd4rp',
     emailjs_public_key:  '7qKJQpX7uzLcxdDMl',
     office_email:        'office2@kd-ins.co.il',
     cc_email:            'ofird@kd-ins.co.il',
@@ -652,6 +652,24 @@ function step3_bank() {
   }, 350);
 }
 
+function step3b_termination() {
+  setTimeout(() => {
+    addMsg(`מכיוון שמדובר ב<strong>${state.product}</strong>, נדרשים מסמכי סיום עבודה.<br><br>
+      <div class="warn-box">📄 <strong>אישור סיום עבודה / מכתב פיטורים</strong> מהמעסיק האחרון.<br>
+      מסמך זה חובה לצורך פדיון רכיב הפיצויים.</div>`);
+    showUpload('termination_doc', '📄 אישור סיום עבודה', 'מכתב פיטורים / אישור מהמעסיק', 'העלה קובץ – JPG/PNG/PDF עד 5MB');
+  }, 350);
+}
+
+function step3c_form161() {
+  setTimeout(() => {
+    addMsg(`מצוין! שלב אחרון במסמכים – <strong>טופס 161 או אישור ממס הכנסה</strong>.<br><br>
+      <div class="warn-box">📋 <strong>טופס 161</strong> – מתקבל מהמעסיק בעת סיום עבודה (מסמך ניכוי מס על פיצויים).<br><br>
+      📋 <strong>אישור ממס הכנסה</strong> – ניתן לקבל מפקיד שומה אם אין טופס 161.</div>`);
+    showUpload('form161_doc', '📋 טופס 161 / אישור מס הכנסה', 'לצורך פדיון פיצויים', 'העלה קובץ – JPG/PNG/PDF עד 5MB');
+  }, 350);
+}
+
 function step4_details() {
   step = 4; setProgress(4);
   setTimeout(() => {
@@ -718,6 +736,15 @@ function handleFile(field, uid, input) {
       } else if (field === 'id_back') {
         step3_bank();
       } else if (field === 'bank_doc') {
+        // פנסיה/ביטוח מנהלים → דרושים מסמכי סיום עבודה
+        if (state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים') {
+          step3b_termination();
+        } else {
+          step4_details();
+        }
+      } else if (field === 'termination_doc') {
+        step3c_form161();
+      } else if (field === 'form161_doc') {
         step4_details();
       }
     }, 600);
@@ -828,6 +855,24 @@ async function submitLead() {
   if (!validateID(idNum)) { showErr('f_id','ת"ז לא תקינה (9 ספרות)'); ok=false; }
   if (!/^0\d{8,9}$/.test(phone.replace(/[-\s]/g,''))) { showErr('f_phone','מספר לא תקין'); ok=false; }
   if (!consent) { showErr('consent','יש לאשר את התנאים'); ok=false; }
+
+  // בדיקת מסמכים – חובה
+  if (!state.id_front) {
+    addMsg('<div class="alert-box danger"><span class="alert-icon">❗</span><span>חסר צילום תעודת זהות. יש לחזור ולהעלות.</span></div>');
+    btn.disabled = false; btn.textContent = 'שלח פנייה לנציג →'; return;
+  }
+  if (!state.bank_doc) {
+    addMsg('<div class="alert-box danger"><span class="alert-icon">❗</span><span>חסר אישור ניהול חשבון / שיק מבוטל. יש לחזור ולהעלות.</span></div>');
+    btn.disabled = false; btn.textContent = 'שלח פנייה לנציג →'; return;
+  }
+  if ((state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים') && !state.termination_doc) {
+    addMsg('<div class="alert-box danger"><span class="alert-icon">❗</span><span>חסר אישור סיום עבודה. נדרש לפדיון פיצויים מ' + state.product + '.</span></div>');
+    btn.disabled = false; btn.textContent = 'שלח פנייה לנציג →'; return;
+  }
+  if ((state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים') && !state.form161_doc) {
+    addMsg('<div class="alert-box danger"><span class="alert-icon">❗</span><span>חסר טופס 161 / אישור מס הכנסה. נדרש לפדיון פיצויים.</span></div>');
+    btn.disabled = false; btn.textContent = 'שלח פנייה לנציג →'; return;
+  }
   if (!ok) return;
 
   // Save
@@ -853,6 +898,8 @@ async function submitLead() {
 • ת"ז צד קדמי: ${state.id_front ? state.id_front.name : '❌'}
 • ת"ז צד אחורי: ${state.id_back ? state.id_back.name : (state.id_type === 'old' ? 'לא נדרש (ת"ז ישנה)' : '❌')}
 • אישור חשבון: ${state.bank_doc ? state.bank_doc.name : '❌'}
+• אישור סיום עבודה: ${state.termination_doc ? state.termination_doc.name : (state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים' ? '❌' : 'לא רלוונטי')}
+• טופס 161/מס הכנסה: ${state.form161_doc ? state.form161_doc.name : (state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים' ? '❌' : 'לא רלוונטי')}
 `.trim();
 
   // Build HTML email with inline document images
@@ -888,32 +935,27 @@ async function submitLead() {
     docImgHtml(state.id_front, '\u05ea"\u05d6 \u2013 \u05e6\u05d3 \u05e7\u05d3\u05de\u05d9') +
     (state.id_type !== 'old' ? docImgHtml(state.id_back, '\u05ea"\u05d6 \u2013 \u05e6\u05d3 \u05d0\u05d7\u05d5\u05e8\u05d9') : '<p style="color:#64748b;font-size:13px">\u05ea"\u05d6 \u05d9\u05e9\u05e0\u05d4 \u2013 \u05e6\u05d3 \u05d0\u05d7\u05d5\u05e8\u05d9 \u05dc\u05d0 \u05e0\u05d3\u05e8\u05e9</p>') +
     docImgHtml(state.bank_doc, '\u05d0\u05d9\u05e9\u05d5\u05e8 \u05e0\u05d9\u05d4\u05d5\u05dc \u05d7\u05e9\u05d1\u05d5\u05df / \u05e9\u05d9\u05e7 \u05de\u05d1\u05d5\u05d8\u05dc') +
+    (state.termination_doc ? docImgHtml(state.termination_doc, '\u05d0\u05d9\u05e9\u05d5\u05e8 \u05e1\u05d9\u05d5\u05dd \u05e2\u05d1\u05d5\u05d3\u05d4') : '') +
+    (state.form161_doc ? docImgHtml(state.form161_doc, '\u05d8\u05d5\u05e4\u05e1 161 / \u05d0\u05d9\u05e9\u05d5\u05e8 \u05de\u05e1 \u05d4\u05db\u05e0\u05e1\u05d4') : '') +
     '<hr style="border:none;border-top:1px solid #e2e8f0;margin:18px 0">' +
     '<p style="font-size:12px;color:#94a3b8;margin:0">\u05e4\u05e0\u05d9\u05d9\u05d4 \u05e0\u05e9\u05dc\u05d7\u05d4 \u05de\u05de\u05de\u05e9\u05e7 \u05d4\u05e6\'\u05d0\u05d8\u05d1\u05d5\u05d8 \u2013 ' + new Date().toLocaleString('he-IL') + '</p>' +
     '</div></div>';
 
-  // Send via Cloudflare Worker (email to office + cc)
+  // Send via EmailJS
   try {
-    await fetch('https://kd-chat.tviot.workers.dev/send-lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to:       'office2@kd-ins.co.il',
-        cc:       'ofird@kd-ins.co.il',
-        subject:  '\u05e4\u05e0\u05d9\u05d9\u05d4 \u05dc\u05e4\u05d3\u05d9\u05d5\u05df \u2013 ' + name + ' | ' + state.product,
-        html:     htmlBody,
-        name, phone,
-        email:    email||'',
-        product:  state.product,
-        company:  company||'',
-        notes:    notes||'',
-        id_num:   idNum,
-        id_front: state.id_front ? state.id_front.dataUrl : null,
-        id_back:  state.id_back  ? state.id_back.dataUrl  : null,
-        bank_doc: state.bank_doc ? state.bank_doc.dataUrl : null,
-      })
-    });
-  } catch(e) { console.warn('Worker error:', e); }
+    emailjs.init(OFFICE_CONFIG.emailjs_public_key);
+    await emailjs.send(
+      OFFICE_CONFIG.emailjs_service_id,
+      OFFICE_CONFIG.emailjs_template_id,
+      {
+        name:      name,
+        product:   state.product,
+        phone:     phone,
+        email:     email || '—',
+        html_body: htmlBody,
+      }
+    );
+  } catch(e) { console.warn('EmailJS error:', e); }
 
   // Show success screen – email was sent automatically above
   document.getElementById('messages').style.display = 'none';
@@ -943,7 +985,7 @@ async function sendFree() {
 function handleQR(txt) { document.getElementById('userInput').value = txt; sendFree(); }
 
 function resetAll() {
-  Object.assign(state, { product:'', id_type:'', id_front:null, id_back:null, bank_doc:null, name:'', phone:'', email:'', notes:'' });
+  Object.assign(state, { product:'', id_type:'', id_front:null, id_back:null, bank_doc:null, termination_doc:null, form161_doc:null, name:'', phone:'', email:'', notes:'' });
   aiHistory = [];
   document.getElementById('successScreen').classList.remove('show');
   document.getElementById('messages').style.display = '';
