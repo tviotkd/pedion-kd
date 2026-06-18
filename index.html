@@ -964,20 +964,20 @@ function showErr(id, msg) {
 
 // ════════════════════════════════════════════
 //  docPayload – BASE64 מאובטח
-//  שולח: filename, mime_type, data_base64
-//  Make צריך להשתמש ב-data_base64 ישירות
-//  ולהגדיר את ה-Content-Type לפי mime_type
+//  filename = השם המקורי של הקובץ שהלקוח העלה
+//  label    = תיאור תפקיד המסמך (לזיהוי ב-Make)
 // ════════════════════════════════════════════
-function docPayload(docObj) {
+function docPayload(docObj, label) {
   if (!docObj || !docObj.dataUrl) return null;
   const commaIdx = docObj.dataUrl.indexOf(',');
   if (commaIdx === -1) return null;
   const base64 = docObj.dataUrl.slice(commaIdx + 1);
   if (!base64) return null;
   return {
-    filename:    docObj.name,
-    mime_type:   docObj.type,   // "image/jpeg" / "image/png" / "application/pdf"
-    data_base64: base64,        // Base64 טהור – ללא prefix של data:...
+    label:       label,            // "ת\"ז קדמי" / "ת\"ז אחורי" / "אישור חשבון" וכו׳
+    filename:    docObj.name,      // השם המקורי של הקובץ שהלקוח העלה
+    mime_type:   docObj.type,      // "image/jpeg" / "image/png" / "application/pdf"
+    data_base64: base64,           // Base64 טהור – ללא prefix
     size_bytes:  Math.round(base64.length * 0.75)
   };
 }
@@ -1024,94 +1024,69 @@ async function submitLead() {
   document.getElementById('sendingOverlay').classList.add('show');
 
   // ════════════════════════════════════════════
-  //  מערך ANSWERS – כל שאלות הפדיון לפי סדר
-  //  fieldId מזהה ייחודי, label = השאלה, value = תשובת הלקוח
+  //  מערך ANSWERS – פרטים אישיים בלבד
   // ════════════════════════════════════════════
   const answers = [
-    {
-      fieldId: 'product_type',
-      label:   'סוג מוצר הפדיון',
-      value:   state.product
-    },
-    {
-      fieldId: 'id_type',
-      label:   'סוג תעודת זהות',
-      value:   state.id_type === 'old' ? 'ת"ז ישנה (ספר כחול)' : 'ת"ז ביומטרית (כרטיס חכם)'
-    },
-    {
-      fieldId: 'id_front_uploaded',
-      label:   state.id_type === 'old' ? 'ת"ז – צד קדמי (עם תמונה)' : 'ת"ז ביומטרית – צד קדמי',
-      value:   state.id_front ? state.id_front.name : 'לא הועלה'
-    },
-    ...(state.id_type === 'biometric' ? [{
-      fieldId: 'id_back_uploaded',
-      label:   'ת"ז ביומטרית – צד אחורי',
-      value:   state.id_back ? state.id_back.name : 'לא הועלה'
-    }] : []),
-    {
-      fieldId: 'bank_doc_uploaded',
-      label:   'אישור ניהול חשבון / שיק מבוטל',
-      value:   state.bank_doc ? state.bank_doc.name : 'לא הועלה'
-    },
-    ...(needsPension ? [
-      {
-        fieldId: 'termination_doc_uploaded',
-        label:   'אישור סיום עבודה / מכתב פיטורים',
-        value:   state.termination_doc ? state.termination_doc.name : 'לא הועלה'
-      },
-      {
-        fieldId: 'form161_uploaded',
-        label:   'טופס 161 / אישור מס הכנסה',
-        value:   state.form161_doc ? state.form161_doc.name : 'לא הועלה'
-      }
+    { fieldId: 'full_name',       label: 'שם מלא',                        value: name          },
+    { fieldId: 'id_number',       label: 'מספר תעודת זהות',               value: idNum         },
+    { fieldId: 'company_manager', label: 'שם חברה מנהלת / גוף',          value: company || '—' },
+    { fieldId: 'notes',           label: 'הערות / פרטים נוספים',          value: notes   || '—' },
+    { fieldId: 'consent',         label: 'אישור נכונות פרטים',            value: 'מאושר ✅'     },
+    // שמות קבצים שהועלו
+    { fieldId: 'file_id_front',   label: state.id_type === 'old' ? 'ת"ז – צד קדמי' : 'ת"ז ביומטרית – צד קדמי',
+      value: state.id_front ? state.id_front.name : '—' },
+    ...(state.id_type === 'biometric' ? [
+      { fieldId: 'file_id_back',  label: 'ת"ז ביומטרית – צד אחורי',
+        value: state.id_back ? state.id_back.name : '—' }
     ] : []),
-    {
-      fieldId: 'full_name',
-      label:   'שם מלא',
-      value:   name
-    },
-    {
-      fieldId: 'id_number',
-      label:   'מספר תעודת זהות',
-      value:   idNum
-    },
-    {
-      fieldId: 'company_manager',
-      label:   'שם חברה מנהלת / גוף',
-      value:   company || '—'
-    },
-    {
-      fieldId: 'notes',
-      label:   'הערות / פרטים נוספים',
-      value:   notes || '—'
-    }
+    { fieldId: 'file_bank',       label: 'אישור ניהול חשבון / שיק מבוטל',
+      value: state.bank_doc ? state.bank_doc.name : '—' },
+    ...(needsPension ? [
+      { fieldId: 'file_termination', label: 'אישור סיום עבודה',
+        value: state.termination_doc ? state.termination_doc.name : '—' },
+      { fieldId: 'file_form161',     label: 'טופס 161 / אישור מס הכנסה',
+        value: state.form161_doc ? state.form161_doc.name : '—' }
+    ] : []),
   ];
 
   const webhookPayload = {
     submitted_at: new Date().toISOString(),
     source:       'pedion-chatbot',
-    // ── מערך תשובות מלא ──
+    product:      state.product,
+    id_type:      state.id_type === 'old' ? 'ת"ז ישנה' : 'ת"ז ביומטרית',
+    // ── פרטים אישיים + שמות קבצים ──
     answers,
-    // ── מסמכים בBase64 ──
+    // ── מסמכים בBase64 – כולם עם label + filename מקורי ──
     documents: {
-      id_front:        docPayload(state.id_front),
-      id_back:         state.id_type === 'biometric' ? docPayload(state.id_back) : null,
-      bank_document:   docPayload(state.bank_doc),
-      termination_doc: needsPension ? docPayload(state.termination_doc) : null,
-      form_161:        needsPension ? docPayload(state.form161_doc)     : null,
+      id_front:        docPayload(state.id_front,        state.id_type === 'old' ? 'ת"ז קדמי' : 'ת"ז ביומטרית – קדמי'),
+      id_back:         state.id_type === 'biometric'
+                         ? docPayload(state.id_back,     'ת"ז ביומטרית – אחורי')
+                         : null,
+      bank_document:   docPayload(state.bank_doc,        'אישור ניהול חשבון'),
+      termination_doc: needsPension
+                         ? docPayload(state.termination_doc, 'אישור סיום עבודה')
+                         : null,
+      form_161:        needsPension
+                         ? docPayload(state.form161_doc,     'טופס 161')
+                         : null,
     }
   };
 
-  // ── לוג לדיבאג ──
   console.log('=== WEBHOOK PAYLOAD ===');
-  console.log('Answers:', answers.map(a => `${a.fieldId}: ${a.value}`).join(' | '));
+  console.log('Product:', webhookPayload.product, '| ID type:', webhookPayload.id_type);
+  console.log('Answers:', answers.map(a => `[${a.fieldId}] ${a.value}`).join(' | '));
   console.log('Docs:', {
-    id_front:        !!webhookPayload.documents.id_front,
-    id_front_mime:   state.id_front?.type,
-    id_back:         state.id_type === 'biometric' ? !!webhookPayload.documents.id_back : 'N/A',
-    bank_document:   !!webhookPayload.documents.bank_document,
-    termination_doc: needsPension ? !!webhookPayload.documents.termination_doc : 'N/A',
-    form_161:        needsPension ? !!webhookPayload.documents.form_161 : 'N/A',
+    id_front:        webhookPayload.documents.id_front   ? `✅ ${state.id_front?.name}`        : '❌',
+    id_back:         state.id_type === 'biometric'
+                       ? (webhookPayload.documents.id_back ? `✅ ${state.id_back?.name}` : '❌')
+                       : 'N/A',
+    bank_document:   webhookPayload.documents.bank_document   ? `✅ ${state.bank_doc?.name}`        : '❌',
+    termination_doc: needsPension
+                       ? (webhookPayload.documents.termination_doc ? `✅ ${state.termination_doc?.name}` : '❌')
+                       : 'N/A',
+    form_161:        needsPension
+                       ? (webhookPayload.documents.form_161 ? `✅ ${state.form161_doc?.name}` : '❌')
+                       : 'N/A',
   });
 
   let webhookOk = false;
