@@ -8,7 +8,7 @@
 <meta property="og:description" content="הגשת בקשת פדיון בקלות ובמהירות. ממלאים פרטים, מעלים מסמכים – נציג חוזר תוך 24 שעות.">
 <meta property="og:url" content="https://pedion-kd.vercel.app">
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
- 
+
 <script>
   const OFFICE_CONFIG = {
     emailjs_service_id:  'service_md105q6',
@@ -22,10 +22,10 @@
     webhook_url:         'https://hook.eu1.make.com/l24oxiafcl5z6idvt0cae0lhsxutlkoe',
   };
 </script>
- 
+
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
- 
+
 :root {
   --bg:        #F0F4FA;
   --surface:   #FFFFFF;
@@ -45,7 +45,7 @@
   --radius-sm: 10px;
   --shadow:    0 4px 24px rgba(0,0,0,0.08);
 }
- 
+
 body {
   font-family: 'Heebo', sans-serif;
   background: var(--bg);
@@ -56,7 +56,7 @@ body {
   justify-content: center;
   padding: 0;
 }
- 
+
 .chat-wrapper {
   width: 100%;
   max-width: 580px;
@@ -73,7 +73,7 @@ body {
 @media (min-width: 620px) {
   .chat-wrapper { border-radius: 24px; height: 92vh; }
 }
- 
+
 .header {
   background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
   padding: 20px 22px 16px;
@@ -116,7 +116,7 @@ body {
   animation: blink 2s infinite;
 }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
- 
+
 .progress-wrap {
   padding: 12px 22px 0;
   display: flex; align-items: center; gap: 10px;
@@ -131,7 +131,7 @@ body {
   transition: width 0.5s ease;
 }
 .progress-label { font-size: 11px; color: rgba(255,255,255,0.5); white-space: nowrap; }
- 
+
 .messages {
   flex: 1; overflow-y: auto;
   padding: 20px 18px 12px;
@@ -140,14 +140,14 @@ body {
 }
 .messages::-webkit-scrollbar { width: 4px; }
 .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
- 
+
 .msg { display: flex; gap: 10px; animation: popIn .28s ease; }
 @keyframes popIn {
   from { opacity: 0; transform: translateY(8px) scale(.97); }
   to   { opacity: 1; transform: none; }
 }
 .msg.user { flex-direction: row-reverse; }
- 
+
 .av {
   width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
@@ -155,7 +155,7 @@ body {
 }
 .av.bot  { background: #EFF6FF; border: 1px solid #BFDBFE; }
 .av.user-av { background: linear-gradient(135deg,var(--navy),var(--blue)); color:#fff; font-size:12px; font-weight:700; }
- 
+
 .bubble {
   max-width: 78%; padding: 13px 17px;
   border-radius: var(--radius); font-size: 14.5px; line-height: 1.7;
@@ -169,7 +169,7 @@ body {
   background: linear-gradient(135deg, var(--navy), var(--blue));
   color: #fff; border-top-left-radius: 4px;
 }
- 
+
 .bubble strong { color: var(--blue); }
 .bubble.user strong { color: #BAE6FD; }
 .bubble .info-box {
@@ -186,8 +186,7 @@ body {
 }
 .ts { font-size: 11px; color: var(--text3); margin-top: 4px; }
 .msg.user .ts { text-align: right; }
- 
-/* UPLOAD CARD */
+
 .upload-card {
   background: var(--surface); border: 2px dashed var(--border);
   border-radius: var(--radius); padding: 18px 20px; margin: 4px 0;
@@ -195,12 +194,12 @@ body {
 }
 .upload-card.has-file { border-color: var(--green); border-style: solid; background: #F0FDF4; }
 .upload-card.error    { border-color: var(--red);   border-style: solid; background: #FEF2F2; }
- 
+
 .upload-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .upload-icon { font-size: 28px; }
 .upload-title { font-size: 14px; font-weight: 700; }
 .upload-sub   { font-size: 12px; color: var(--text2); margin-top: 2px; }
- 
+
 .upload-zone {
   border: 1.5px dashed #CBD5E1; border-radius: 10px;
   padding: 14px; text-align: center; cursor: pointer;
@@ -213,7 +212,7 @@ body {
 }
 .upload-zone .zone-text { font-size: 13px; color: var(--text3); pointer-events: none; }
 .upload-zone .zone-icon { font-size: 24px; margin-bottom: 4px; }
- 
+
 .file-preview {
   display: flex; align-items: center; gap: 10px; padding: 10px 13px;
   background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 9px;
@@ -225,10 +224,9 @@ body {
   padding: 2px 6px; border-radius: 4px; transition: background .15s;
 }
 .file-preview .fp-remove:hover { background: #FEE2E2; color: var(--red); }
- 
+
 .upload-tip { font-size: 11.5px; color: var(--text3); margin-top: 8px; line-height: 1.5; }
- 
-/* ID VALIDATION */
+
 .id-input-wrap { position: relative; }
 .id-status-icon {
   position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
@@ -241,15 +239,14 @@ body {
 .id-hint.valid   { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; display: block; }
 .id-hint.invalid { background: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; display: block; }
 .id-hint.warn    { background: #FFFBEB; color: #78350F; border: 1px solid #FDE68A; display: block; }
- 
-/* FORM CARD */
+
 .form-card {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 20px; margin: 4px 0;
   box-shadow: 0 2px 12px rgba(0,0,0,0.05);
 }
 .form-card h3 { font-size: 15px; font-weight: 800; margin-bottom: 16px; color: var(--navy); }
- 
+
 .field-group { margin-bottom: 14px; }
 .field-group label { display: block; font-size: 12.5px; font-weight: 600; color: var(--text2); margin-bottom: 5px; }
 .field-group label span.req { color: var(--red); margin-right: 2px; }
@@ -272,9 +269,9 @@ body {
 .field-group input.err, .field-group select.err { border-color: var(--red); box-shadow: 0 0 0 3px rgba(220,38,38,0.1); }
 .field-group input.valid-id { border-color: var(--green); box-shadow: 0 0 0 3px rgba(5,150,105,0.1); }
 .field-err { font-size: 11.5px; color: var(--red); margin-top: 4px; display: none; }
- 
+
 .field-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
- 
+
 .submit-btn {
   width: 100%; padding: 14px; border: none; border-radius: 12px; cursor: pointer;
   background: linear-gradient(135deg, var(--navy), var(--blue));
@@ -284,8 +281,7 @@ body {
 }
 .submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(29,95,212,0.45); }
 .submit-btn:disabled { opacity: .5; cursor: not-allowed; }
- 
-/* PRODUCT CHOICE */
+
 .choice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin: 6px 0; }
 .choice-btn {
   padding: 13px 10px; border: 1.5px solid var(--border); border-radius: 12px;
@@ -296,8 +292,7 @@ body {
 .choice-btn:hover { border-color: var(--blue); color: var(--blue); background: #EFF6FF; }
 .choice-btn.selected { border-color: var(--blue); background: #EFF6FF; color: var(--blue); }
 .choice-btn .cb-icon { font-size: 24px; display: block; margin-bottom: 5px; }
- 
-/* QUICK REPLIES */
+
 .qr-wrap { padding: 0 18px 10px; display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
 .qr-btn {
   padding: 8px 15px; border: 1.5px solid var(--border); border-radius: 20px;
@@ -305,8 +300,7 @@ body {
   font-family: 'Heebo', sans-serif; transition: all .15s;
 }
 .qr-btn:hover { border-color: var(--blue); color: var(--blue); background: #EFF6FF; }
- 
-/* INPUT */
+
 .input-area {
   padding: 12px 16px 16px;
   background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0;
@@ -324,7 +318,7 @@ textarea#userInput {
   max-height: 90px; line-height: 1.5; color: var(--text);
 }
 textarea#userInput::placeholder { color: var(--text3); }
- 
+
 .send-btn {
   width: 44px; height: 44px; border: none; cursor: pointer; border-radius: 11px;
   background: linear-gradient(135deg, var(--blue), var(--teal));
@@ -333,8 +327,7 @@ textarea#userInput::placeholder { color: var(--text3); }
 }
 .send-btn:hover:not(:disabled) { transform: scale(1.07) translateY(-1px); }
 .send-btn:disabled { opacity: .4; cursor: not-allowed; }
- 
-/* Typing */
+
 .typing { display: flex; gap: 10px; }
 .dot-w { display: flex; gap: 5px; align-items: center; padding: 5px 0; }
 .dot-w span {
@@ -344,8 +337,7 @@ textarea#userInput::placeholder { color: var(--text3); }
 .dot-w span:nth-child(2) { animation-delay:.15s; }
 .dot-w span:nth-child(3) { animation-delay:.3s; }
 @keyframes dw { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
- 
-/* SENDING OVERLAY */
+
 .sending-overlay {
   display: none;
   position: absolute; inset: 0;
@@ -369,8 +361,7 @@ textarea#userInput::placeholder { color: var(--text3); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .sending-text { color: #fff; font-size: 15px; font-weight: 600; }
 .sending-sub  { color: rgba(255,255,255,0.6); font-size: 12px; }
- 
-/* SUCCESS SCREEN */
+
 .success-screen {
   display: none; flex-direction: column; align-items: center; justify-content: center;
   flex: 1; padding: 32px 28px; text-align: center; gap: 16px;
@@ -380,15 +371,14 @@ textarea#userInput::placeholder { color: var(--text3); }
 @keyframes bounceIn { from{opacity:0;transform:scale(.4)} to{opacity:1;transform:scale(1)} }
 .success-screen h2 { font-size: 22px; font-weight: 900; color: var(--navy); }
 .success-screen p  { font-size: 14px; color: var(--text2); line-height: 1.7; max-width: 340px; }
- 
+
 .new-lead-btn {
   padding: 11px 24px; border: 1.5px solid var(--border); border-radius: 20px;
   background: transparent; cursor: pointer; font-family: 'Heebo', sans-serif;
   font-size: 13px; color: var(--text2); margin-top: 4px; transition: all .15s;
 }
 .new-lead-btn:hover { border-color: var(--blue); color: var(--blue); }
- 
-/* DOCS CHECKLIST */
+
 .docs-checklist {
   background: #F8FAFC; border: 1px solid var(--border);
   border-radius: 12px; padding: 14px 16px; margin: 8px 0;
@@ -406,10 +396,9 @@ textarea#userInput::placeholder { color: var(--text3); }
 </style>
 </head>
 <body>
- 
+
 <div class="chat-wrapper" id="chatWrapper">
- 
-  <!-- HEADER -->
+
   <div class="header">
     <div class="header-row">
       <div class="header-logo">
@@ -427,14 +416,10 @@ textarea#userInput::placeholder { color: var(--text3); }
       <div class="progress-label" id="progressLabel">שלב 1 מתוך 4</div>
     </div>
   </div>
- 
-  <!-- MESSAGES -->
+
   <div class="messages" id="messages"></div>
- 
-  <!-- QUICK REPLIES -->
   <div class="qr-wrap" id="qrWrap" style="display:none"></div>
- 
-  <!-- INPUT -->
+
   <div class="input-area" id="inputArea" style="display:none">
     <div class="input-row">
       <div class="input-box">
@@ -444,31 +429,27 @@ textarea#userInput::placeholder { color: var(--text3); }
       <button class="send-btn" id="sendBtn" onclick="sendFree()">➤</button>
     </div>
   </div>
- 
-  <!-- CONTACT BAR -->
+
   <div style="text-align:center;padding:8px 16px;background:#F0F4FA;border-top:1px solid #E2E8F0;font-size:12.5px;color:#475569;flex-shrink:0">
     לכל שאלה פנה למשרד Kaplan & Dahan:&nbsp;
     <a href="tel:033731410" style="color:#1D5FD4;font-weight:700;text-decoration:none">📞 03-3731410</a>
   </div>
- 
-  <!-- SUCCESS SCREEN -->
+
   <div class="success-screen" id="successScreen">
     <div class="success-icon">✅</div>
     <h2>הפנייה נשלחה בהצלחה!</h2>
     <p id="successMsg">הפרטים והמסמכים הועברו אוטומטית למשרד.<br>נציג יחזור אליך תוך <strong id="respHours">24</strong> שעות. 🙏</p>
     <button class="new-lead-btn" onclick="resetAll()">← פנייה חדשה</button>
   </div>
- 
-  <!-- SENDING OVERLAY -->
+
   <div class="sending-overlay" id="sendingOverlay">
     <div class="sending-spinner"></div>
     <div class="sending-text">שולח את הפנייה...</div>
     <div class="sending-sub">מעביר מסמכים בצורה מאובטחת</div>
   </div>
- 
+
 </div>
- 
-<!-- EmailJS -->
+
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 <script>
 // ════════════════════════════════════════════
@@ -477,7 +458,7 @@ textarea#userInput::placeholder { color: var(--text3); }
 let step = 0;
 let busy = false;
 let aiHistory = [];
- 
+
 const state = {
   product: '',
   id_type: '',
@@ -488,15 +469,15 @@ const state = {
   form161_doc: null,
   name: '', id_number: '', company: '', notes: '',
 };
- 
+
 const STEPS_TOTAL = 4;
- 
+
 function setProgress(s) {
   const pct = Math.round((s / STEPS_TOTAL) * 100);
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressLabel').textContent = `שלב ${Math.min(s,STEPS_TOTAL)} מתוך ${STEPS_TOTAL}`;
 }
- 
+
 // ════════════════════════════════════════════
 //  ID VALIDATION
 // ════════════════════════════════════════════
@@ -514,7 +495,7 @@ function validateIsraeliID(id) {
   if (sum % 10 !== 0) return { valid: false, reason: 'ספרת הביקורת אינה תקינה – בדוק שהקלדת נכון' };
   return { valid: true };
 }
- 
+
 function onIDInput(inputEl) {
   const raw = inputEl.value;
   const cleaned = raw.replace(/\D/g, '').slice(0, 9);
@@ -545,14 +526,14 @@ function onIDInput(inputEl) {
     inputEl.classList.remove('valid-id'); inputEl.classList.add('err');
   }
 }
- 
+
 // ════════════════════════════════════════════
 //  AI
 // ════════════════════════════════════════════
 const AI_SYSTEM = `אתה נציג קבלת פניות של משרד פיננסי המתמחה בפדיון קרנות פנסיה, קופות גמל, קרנות השתלמות, ביטוח מנהלים ופוליסות חיסכון.
 תפקידך: לענות בקצרה ובידידותיות לשאלות חופשיות. תמיד בעברית. תשובות קצרות – 2-4 משפטים.
 אל תבקש מסמכים – הממשק עושה זאת אוטומטית. אם שואלים על טפסים/תהליך – ענה בקצרה.`;
- 
+
 async function askAI(userMsg) {
   aiHistory.push({ role: 'user', content: userMsg });
   try {
@@ -572,7 +553,7 @@ async function askAI(userMsg) {
     return reply;
   } catch(e) { return 'שגיאת חיבור – נסה שנית.'; }
 }
- 
+
 // ════════════════════════════════════════════
 //  RENDER HELPERS
 // ════════════════════════════════════════════
@@ -584,7 +565,7 @@ function scrollEnd() {
   setTimeout(() => m.scrollTop = m.scrollHeight, 60);
 }
 function clearQR() { document.getElementById('qrWrap').innerHTML = ''; }
- 
+
 function addMsg(html, side='bot') {
   const m = document.getElementById('messages');
   const d = document.createElement('div');
@@ -595,9 +576,9 @@ function addMsg(html, side='bot') {
   d.innerHTML = `${av}<div><div class="bubble ${side === 'user' ? 'user' : 'bot'}">${html}</div><div class="ts">${ts()}</div></div>`;
   m.appendChild(d); scrollEnd(); return d;
 }
- 
+
 function addUserMsg(txt) { addMsg(txt.replace(/\n/g,'<br>'), 'user'); }
- 
+
 function showTyping() {
   const m = document.getElementById('messages');
   const d = document.createElement('div');
@@ -606,7 +587,7 @@ function showTyping() {
   m.appendChild(d); scrollEnd();
 }
 function hideTyping() { const t=document.getElementById('typing'); if(t)t.remove(); }
- 
+
 function autoResize(el) {
   el.style.height='auto';
   el.style.height = Math.min(el.scrollHeight,90)+'px';
@@ -614,13 +595,13 @@ function autoResize(el) {
 function handleKey(e) {
   if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendFree();}
 }
- 
+
 // ════════════════════════════════════════════
 //  FLOW
 // ════════════════════════════════════════════
 function start() {
   step = 0; setProgress(0);
- 
+
   setTimeout(() => {
     addMsg(`שלום! 👋 אני אדריך אותך בתהליך פנייה לפדיון חיסכון.<br><br>
       <strong>שלבים פשוטים:</strong><br>
@@ -631,7 +612,7 @@ function start() {
       <div class="info-box">⏱️ תהליך ממוצע: <strong>3–5 דקות</strong>. נציג יחזור תוך ${OFFICE_CONFIG.response_hours} שעות.<br>לכל שאלה ניתן לפנות למשרד: <a href="tel:033731410" style="color:#1d5fd4;font-weight:700;white-space:nowrap">03-3731410</a></div>`
     );
   }, 400);
- 
+
   setTimeout(() => {
     addMsg(`<div style="background:#FFF8E7;border:2px solid #F59E0B;border-radius:12px;padding:16px 18px">
         <div style="font-size:15px;font-weight:800;color:#92400E;margin-bottom:10px">💡 רגע לפני שממשיכים – כדאי לדעת!</div>
@@ -649,14 +630,14 @@ function start() {
       </div>`
     );
   }, 5400);
- 
+
   setTimeout(() => {
     addMsg(`אם החלטת להמשיך בפדיון – באיזה מוצר מדובר?`);
     showProductChoice();
     step = 1; setProgress(1);
   }, 15400);
 }
- 
+
 function showProductChoice() {
   const m = document.getElementById('messages');
   const d = document.createElement('div');
@@ -678,7 +659,7 @@ function showProductChoice() {
   </div>`;
   m.appendChild(d); scrollEnd();
 }
- 
+
 function selectProduct(val, label) {
   state.product = label;
   document.querySelectorAll('.choice-btn').forEach(b=>{
@@ -697,7 +678,7 @@ function selectProduct(val, label) {
     }, 400);
   }, 200);
 }
- 
+
 function showIdTypeChoice() {
   const m = document.getElementById('messages');
   const d = document.createElement('div');
@@ -720,14 +701,14 @@ function showIdTypeChoice() {
   </div>`;
   m.appendChild(d); scrollEnd();
 }
- 
+
 function selectIdType(type) {
   state.id_type = type;
   state.id_front = null;
   state.id_back  = null;
- 
+
   document.getElementById('idTypeChoice')?.remove();
- 
+
   if (type === 'biometric') {
     addUserMsg('ת"ז ביומטרית');
     setTimeout(() => {
@@ -745,7 +726,7 @@ function selectIdType(type) {
     }, 300);
   }
 }
- 
+
 function step2_idBack() {
   setTimeout(() => {
     addMsg(`תודה! עכשיו <strong>הצד האחורי</strong> של הת"ז הביומטרית.<br>
@@ -753,7 +734,7 @@ function step2_idBack() {
     showUpload('id_back', '🪪', 'ת"ז ביומטרית – צד אחורי', 'הצד עם הפסים');
   }, 350);
 }
- 
+
 function step3_bank() {
   step = 3; setProgress(3);
   setTimeout(() => {
@@ -763,7 +744,7 @@ function step3_bank() {
     showUpload('bank_doc', '🏦', 'אישור ניהול חשבון / שיק מבוטל', 'לאימות חשבון להעברת כסף');
   }, 350);
 }
- 
+
 function step3b_termination() {
   setTimeout(() => {
     addMsg(`מכיוון שמדובר ב<strong>${state.product}</strong>, נדרשים מסמכי סיום עבודה.<br><br>
@@ -771,7 +752,7 @@ function step3b_termination() {
     showUpload('termination_doc', '📄', 'אישור סיום עבודה', 'מכתב פיטורים / אישור מהמעסיק');
   }, 350);
 }
- 
+
 function step3c_form161() {
   setTimeout(() => {
     addMsg(`שלב אחרון במסמכים – <strong>טופס 161 או אישור ממס הכנסה</strong>.<br><br>
@@ -780,7 +761,7 @@ function step3c_form161() {
     showUpload('form161_doc', '📋', 'טופס 161 / אישור מס הכנסה', 'לצורך פדיון פיצויים');
   }, 350);
 }
- 
+
 function step4_details() {
   step = 4; setProgress(4);
   setTimeout(() => {
@@ -788,8 +769,7 @@ function step4_details() {
     showDetailsForm();
   }, 350);
 }
- 
-// ── UPLOAD CARD ──
+
 function showUpload(field, icon, title, sub) {
   const m = document.getElementById('messages');
   const uid = 'upload_' + field;
@@ -814,7 +794,7 @@ function showUpload(field, icon, title, sub) {
   </div>`;
   m.appendChild(d); scrollEnd();
 }
- 
+
 function handleFile(field, uid, input) {
   const file = input.files[0];
   if (!file) return;
@@ -830,7 +810,7 @@ function handleFile(field, uid, input) {
       return;
     }
     state[field] = { name: file.name, dataUrl: dataUrl, type: file.type };
- 
+
     const card = document.getElementById(uid+'_card');
     if (card) card.classList.add('has-file');
     const zone = document.getElementById(uid+'_zone');
@@ -842,9 +822,9 @@ function handleFile(field, uid, input) {
         <span class="fp-name">${file.name}</span>
         <span class="fp-remove" onclick="removeFile('${field}','${uid}')">✕</span>
       </div>`;
- 
-    console.log('File saved:', field, '| name:', file.name, '| state ok:', !!state[field]);
- 
+
+    console.log('File saved:', field, '| name:', file.name, '| mime:', file.type);
+
     setTimeout(() => {
       if (field === 'id_front') {
         if (state.id_type === 'old') {
@@ -869,14 +849,14 @@ function handleFile(field, uid, input) {
       }
     }, 700);
   };
- 
+
   reader.onerror = () => {
     alert('שגיאה בקריאת הקובץ. אנא נסה קובץ אחר.');
   };
- 
+
   reader.readAsDataURL(file);
 }
- 
+
 function removeFile(field, uid) {
   state[field] = null;
   const card = document.getElementById(uid+'_card');
@@ -886,8 +866,7 @@ function removeFile(field, uid) {
   const preview = document.getElementById(uid+'_preview');
   if (preview) preview.innerHTML = '';
 }
- 
-// ── DETAILS FORM ──
+
 function showDetailsForm() {
   const m = document.getElementById('messages');
   const d = document.createElement('div');
@@ -896,7 +875,7 @@ function showDetailsForm() {
   <div style="flex:1;max-width:92%">
     <div class="form-card">
       <h3>📋 פרטים אישיים</h3>
- 
+
       <div class="field-row2">
         <div class="field-group">
           <label>שם מלא <span class="req">*</span></label>
@@ -914,19 +893,19 @@ function showDetailsForm() {
           <div class="field-err" id="err_f_id" style="display:none"></div>
         </div>
       </div>
- 
+
       <div class="field-group">
         <label>שם חברה מנהלת / גוף</label>
         <input type="text" id="f_company" placeholder="אנליסט, מור, מיטב דש, הפניקס, מנורה, הראל, מגדל, כלל, ילין לפיד...">
       </div>
- 
+
       <div class="field-group">
         <label>הערות / פרטים נוספים</label>
         <textarea id="f_notes" rows="2" placeholder="למשל: פדיון חלקי, גיל פרישה, מספר פוליסה..." style="resize:none"></textarea>
       </div>
- 
+
       <div id="docs-summary" class="docs-checklist" style="margin-bottom:14px"></div>
- 
+
       <div class="field-group" style="display:flex;gap:8px;align-items:center">
         <input type="checkbox" id="f_consent" style="width:18px;height:18px;cursor:pointer;flex-shrink:0">
         <label for="f_consent" style="font-size:12.5px;color:var(--text2);cursor:pointer;margin:0">
@@ -934,7 +913,7 @@ function showDetailsForm() {
         </label>
       </div>
       <div class="field-err" id="err_consent">יש לאשר את התנאים</div>
- 
+
       <button class="submit-btn" onclick="submitLead()">שלח פנייה לנציג →</button>
     </div>
     <div class="ts">${ts()}</div>
@@ -943,7 +922,7 @@ function showDetailsForm() {
   document.getElementById('inputArea').style.display = 'none';
   buildDocsSummary();
 }
- 
+
 function buildDocsSummary() {
   const el = document.getElementById('docs-summary');
   if (!el) return;
@@ -969,7 +948,7 @@ function buildDocsSummary() {
       </div>`;
     }).join('');
 }
- 
+
 function clearErr(id) {
   const el = document.getElementById(id);
   if (el) el.classList.remove('err');
@@ -982,7 +961,27 @@ function showErr(id, msg) {
   const er = document.getElementById('err_'+id);
   if (er) { er.textContent = msg||'שדה חובה'; er.style.display = 'block'; }
 }
- 
+
+// ════════════════════════════════════════════
+//  docPayload – BASE64 מאובטח
+//  שולח: filename, mime_type, data_base64
+//  Make צריך להשתמש ב-data_base64 ישירות
+//  ולהגדיר את ה-Content-Type לפי mime_type
+// ════════════════════════════════════════════
+function docPayload(docObj) {
+  if (!docObj || !docObj.dataUrl) return null;
+  const commaIdx = docObj.dataUrl.indexOf(',');
+  if (commaIdx === -1) return null;
+  const base64 = docObj.dataUrl.slice(commaIdx + 1);
+  if (!base64) return null;
+  return {
+    filename:    docObj.name,
+    mime_type:   docObj.type,   // "image/jpeg" / "image/png" / "application/pdf"
+    data_base64: base64,        // Base64 טהור – ללא prefix של data:...
+    size_bytes:  Math.round(base64.length * 0.75)
+  };
+}
+
 // ════════════════════════════════════════════
 //  SUBMIT
 // ════════════════════════════════════════════
@@ -992,63 +991,108 @@ async function submitLead() {
   const company = document.getElementById('f_company').value.trim();
   const notes   = document.getElementById('f_notes').value.trim();
   const consent = document.getElementById('f_consent').checked;
- 
+
   let ok = true;
   if (!name) { showErr('f_name'); ok = false; }
- 
+
   const idValidation = validateIsraeliID(idNum);
   if (!idValidation.valid) {
     showErr('f_id', idValidation.reason || 'ת"ז לא תקינה (9 ספרות)');
     ok = false;
   }
   if (!consent) { showErr('consent', 'יש לאשר את התנאים'); ok = false; }
- 
+
   const needsPension = state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים';
   const missingDocs = [];
- 
+
   if (!state.id_front) missingDocs.push('תעודת זהות – צד קדמי');
   if (state.id_type === 'biometric' && !state.id_back) missingDocs.push('ת"ז ביומטרית – צד אחורי');
   if (!state.bank_doc) missingDocs.push('אישור ניהול חשבון / שיק מבוטל');
   if (needsPension && !state.termination_doc) missingDocs.push('אישור סיום עבודה');
   if (needsPension && !state.form161_doc) missingDocs.push('טופס 161 / אישור מס הכנסה');
- 
+
   if (missingDocs.length > 0) {
     addMsg(`❗ חסרים המסמכים הבאים:<br>• ${missingDocs.join('<br>• ')}<br><br>יש לחזור ולהעלות לפני השליחה.`);
     buildDocsSummary();
     return;
   }
- 
+
   if (!ok) return;
- 
+
   state.name = name; state.id_number = idNum; state.company = company; state.notes = notes;
- 
+
   document.getElementById('sendingOverlay').classList.add('show');
- 
-  function docPayload(docObj) {
-    if (!docObj || !docObj.dataUrl) return null;
-    const parts = docObj.dataUrl.split(',');
-    if (parts.length < 2) return null;
-    const base64 = parts[1];
-    if (!base64) return null;
-    return {
-      filename:   docObj.name,
-      mime_type:  docObj.type,
-      data_base64: base64,
-      size_bytes: Math.round(base64.length * 0.75)
-    };
-  }
- 
+
+  // ════════════════════════════════════════════
+  //  מערך ANSWERS – כל שאלות הפדיון לפי סדר
+  //  fieldId מזהה ייחודי, label = השאלה, value = תשובת הלקוח
+  // ════════════════════════════════════════════
+  const answers = [
+    {
+      fieldId: 'product_type',
+      label:   'סוג מוצר הפדיון',
+      value:   state.product
+    },
+    {
+      fieldId: 'id_type',
+      label:   'סוג תעודת זהות',
+      value:   state.id_type === 'old' ? 'ת"ז ישנה (ספר כחול)' : 'ת"ז ביומטרית (כרטיס חכם)'
+    },
+    {
+      fieldId: 'id_front_uploaded',
+      label:   state.id_type === 'old' ? 'ת"ז – צד קדמי (עם תמונה)' : 'ת"ז ביומטרית – צד קדמי',
+      value:   state.id_front ? state.id_front.name : 'לא הועלה'
+    },
+    ...(state.id_type === 'biometric' ? [{
+      fieldId: 'id_back_uploaded',
+      label:   'ת"ז ביומטרית – צד אחורי',
+      value:   state.id_back ? state.id_back.name : 'לא הועלה'
+    }] : []),
+    {
+      fieldId: 'bank_doc_uploaded',
+      label:   'אישור ניהול חשבון / שיק מבוטל',
+      value:   state.bank_doc ? state.bank_doc.name : 'לא הועלה'
+    },
+    ...(needsPension ? [
+      {
+        fieldId: 'termination_doc_uploaded',
+        label:   'אישור סיום עבודה / מכתב פיטורים',
+        value:   state.termination_doc ? state.termination_doc.name : 'לא הועלה'
+      },
+      {
+        fieldId: 'form161_uploaded',
+        label:   'טופס 161 / אישור מס הכנסה',
+        value:   state.form161_doc ? state.form161_doc.name : 'לא הועלה'
+      }
+    ] : []),
+    {
+      fieldId: 'full_name',
+      label:   'שם מלא',
+      value:   name
+    },
+    {
+      fieldId: 'id_number',
+      label:   'מספר תעודת זהות',
+      value:   idNum
+    },
+    {
+      fieldId: 'company_manager',
+      label:   'שם חברה מנהלת / גוף',
+      value:   company || '—'
+    },
+    {
+      fieldId: 'notes',
+      label:   'הערות / פרטים נוספים',
+      value:   notes || '—'
+    }
+  ];
+
   const webhookPayload = {
     submitted_at: new Date().toISOString(),
-    source: 'pedion-chatbot',
-    personal_info: {
-      full_name:       name,
-      id_number:       idNum,
-      company_manager: company || null,
-      notes:           notes   || null,
-    },
-    product: state.product,
-    id_type: state.id_type === 'old' ? 'ת"ז ישנה' : 'ת"ז ביומטרית',
+    source:       'pedion-chatbot',
+    // ── מערך תשובות מלא ──
+    answers,
+    // ── מסמכים בBase64 ──
     documents: {
       id_front:        docPayload(state.id_front),
       id_back:         state.id_type === 'biometric' ? docPayload(state.id_back) : null,
@@ -1057,18 +1101,19 @@ async function submitLead() {
       form_161:        needsPension ? docPayload(state.form161_doc)     : null,
     }
   };
- 
-  console.log('=== WEBHOOK PAYLOAD SUMMARY ===');
-  console.log('Product:', webhookPayload.product);
-  console.log('ID Type:', webhookPayload.id_type);
+
+  // ── לוג לדיבאג ──
+  console.log('=== WEBHOOK PAYLOAD ===');
+  console.log('Answers:', answers.map(a => `${a.fieldId}: ${a.value}`).join(' | '));
   console.log('Docs:', {
     id_front:        !!webhookPayload.documents.id_front,
-    id_back:         webhookPayload.documents.id_back !== null ? !!webhookPayload.documents.id_back : 'לא רלוונטי',
+    id_front_mime:   state.id_front?.type,
+    id_back:         state.id_type === 'biometric' ? !!webhookPayload.documents.id_back : 'N/A',
     bank_document:   !!webhookPayload.documents.bank_document,
-    termination_doc: webhookPayload.documents.termination_doc !== null ? !!webhookPayload.documents.termination_doc : 'לא רלוונטי',
-    form_161:        webhookPayload.documents.form_161 !== null ? !!webhookPayload.documents.form_161 : 'לא רלוונטי',
+    termination_doc: needsPension ? !!webhookPayload.documents.termination_doc : 'N/A',
+    form_161:        needsPension ? !!webhookPayload.documents.form_161 : 'N/A',
   });
- 
+
   let webhookOk = false;
   try {
     const res = await fetch(OFFICE_CONFIG.webhook_url, {
@@ -1082,13 +1127,13 @@ async function submitLead() {
   } catch(e) {
     console.error('Webhook error:', e);
   }
- 
+
   try {
     emailjs.init(OFFICE_CONFIG.emailjs_public_key);
     const idBackLine = state.id_type === 'biometric'
       ? 'ת"ז אחורי: '  + (state.id_back ? '✅ ' + state.id_back.name : '❌ חסר') + '\n'
       : 'ת"ז אחורי: לא נדרש (ת"ז ישנה)\n';
- 
+
     await emailjs.send(
       OFFICE_CONFIG.emailjs_service_id,
       OFFICE_CONFIG.emailjs_template_id,
@@ -1112,7 +1157,7 @@ async function submitLead() {
       }
     );
   } catch(e) { console.warn('EmailJS error:', e); }
- 
+
   document.getElementById('sendingOverlay').classList.remove('show');
   document.getElementById('messages').style.display   = 'none';
   document.getElementById('qrWrap').style.display     = 'none';
@@ -1120,7 +1165,7 @@ async function submitLead() {
   document.getElementById('successScreen').classList.add('show');
   document.getElementById('respHours').textContent = OFFICE_CONFIG.response_hours;
 }
- 
+
 // ════════════════════════════════════════════
 //  FREE TEXT / RESET
 // ════════════════════════════════════════════
@@ -1135,9 +1180,9 @@ async function sendFree() {
   hideTyping(); addMsg(reply.replace(/\n/g,'<br>'));
   busy = false; document.getElementById('sendBtn').disabled = false;
 }
- 
+
 function handleQR(txt) { document.getElementById('userInput').value = txt; sendFree(); }
- 
+
 function resetAll() {
   Object.assign(state, {
     product:'', id_type:'',
@@ -1153,7 +1198,7 @@ function resetAll() {
   document.getElementById('inputArea').style.display = '';
   start();
 }
- 
+
 window.onload = () => {
   document.getElementById('respHours').textContent = OFFICE_CONFIG.response_hours;
   start();
