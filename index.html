@@ -809,7 +809,9 @@ function handleFile(field, uid, input) {
       alert('שגיאה בקריאת הקובץ. אנא נסה שנית.');
       return;
     }
-    state[field] = { name: file.name, dataUrl: dataUrl, type: file.type };
+
+    // שמירה מנורמלת – ללא dataUrl גולמי
+    state[field] = normalizeUploadedFile(file, dataUrl);
 
     const card = document.getElementById(uid+'_card');
     if (card) card.classList.add('has-file');
@@ -819,11 +821,11 @@ function handleFile(field, uid, input) {
     if (preview) preview.innerHTML = `
       <div class="file-preview">
         <span>✅</span>
-        <span class="fp-name">${file.name}</span>
+        <span class="fp-name">${state[field].filename}</span>
         <span class="fp-remove" onclick="removeFile('${field}','${uid}')">✕</span>
       </div>`;
 
-    console.log('File saved:', field, '| name:', file.name, '| mime:', file.type);
+    console.log('File saved:', field, '| filename:', state[field].filename, '| mime:', state[field].mime_type, '| size:', state[field].size_bytes);
 
     setTimeout(() => {
       if (field === 'id_front') {
@@ -944,7 +946,7 @@ function buildDocsSummary() {
       return `<div class="doc-item ${uploaded ? 'done' : 'missing'}">
         <span class="doc-status">${uploaded ? '✅' : '❌'}</span>
         <span class="doc-name">${d.label}</span>
-        ${uploaded ? `<span style="font-size:11px;color:var(--text3)">${state[d.field].name}</span>` : ''}
+        ${uploaded ? `<span style="font-size:11px;color:var(--text3)">${state[d.field].filename}</span>` : ''}
       </div>`;
     }).join('');
 }
@@ -963,22 +965,58 @@ function showErr(id, msg) {
 }
 
 // ════════════════════════════════════════════
-//  docPayload – BASE64 מאובטח
-//  filename = השם המקורי של הקובץ שהלקוח העלה
-//  label    = תיאור תפקיד המסמך (לזיהוי ב-Make)
+//  normalizeUploadedFile – ניקוי וזיהוי קובץ
+// ════════════════════════════════════════════
+function detectMimeFromBase64(b64) {
+  if (b64.startsWith('iVBORw0KGgo')) return 'image/png';
+  if (b64.startsWith('/9j/'))        return 'image/jpeg';
+  if (b64.startsWith('JVBERi0'))     return 'application/pdf';
+  return 'application/octet-stream';
+}
+
+function mimeToExt(mime) {
+  if (mime === 'image/png')       return '.png';
+  if (mime === 'image/jpeg')      return '.jpg';
+  if (mime === 'application/pdf') return '.pdf';
+  return '';
+}
+
+function normalizeUploadedFile(file, dataUrl) {
+  // חיתוך Base64 נקי
+  const commaIdx = dataUrl.indexOf(',');
+  const raw = commaIdx !== -1 ? dataUrl.slice(commaIdx + 1) : dataUrl;
+  const data_base64 = raw.replace(/[\s\r\n\t]/g, '');
+
+  // זיהוי mime
+  const mime_type = (file.type && file.type !== '')
+    ? file.type
+    : detectMimeFromBase64(data_base64);
+
+  // בדיקה שהסיומת תואמת
+  const correctExt  = mimeToExt(mime_type);
+  const baseName    = file.name.replace(/\.[^.]+$/, ''); // ללא סיומת קיימת
+  const filename    = correctExt ? baseName + correctExt : file.name;
+
+  return {
+    name:        file.name,   // שם מקורי (לתצוגה)
+    filename,                 // שם עם סיומת נכונה (לשליחה)
+    mime_type,
+    data_base64,
+    size_bytes: Math.round(data_base64.length * 0.75),
+  };
+}
+
+// ════════════════════════════════════════════
+//  docPayload – קורא מ-state ישירות, לא מ-dataUrl
 // ════════════════════════════════════════════
 function docPayload(docObj, label) {
-  if (!docObj || !docObj.dataUrl) return null;
-  const commaIdx = docObj.dataUrl.indexOf(',');
-  if (commaIdx === -1) return null;
-  const base64 = docObj.dataUrl.slice(commaIdx + 1);
-  if (!base64) return null;
+  if (!docObj || !docObj.data_base64) return null;
   return {
-    label:       label,            // "ת\"ז קדמי" / "ת\"ז אחורי" / "אישור חשבון" וכו׳
-    filename:    docObj.name,      // השם המקורי של הקובץ שהלקוח העלה
-    mime_type:   docObj.type,      // "image/jpeg" / "image/png" / "application/pdf"
-    data_base64: base64,           // Base64 טהור – ללא prefix
-    size_bytes:  Math.round(base64.length * 0.75)
+    label,
+    filename:    docObj.filename,
+    mime_type:   docObj.mime_type,
+    data_base64: docObj.data_base64,
+    size_bytes:  docObj.size_bytes,
   };
 }
 
@@ -1034,18 +1072,18 @@ async function submitLead() {
     { fieldId: 'consent',         label: 'אישור נכונות פרטים',            value: 'מאושר ✅'     },
     // שמות קבצים שהועלו
     { fieldId: 'file_id_front',   label: state.id_type === 'old' ? 'ת"ז – צד קדמי' : 'ת"ז ביומטרית – צד קדמי',
-      value: state.id_front ? state.id_front.name : '—' },
+      value: state.id_front ? state.id_front.filename : '—' },
     ...(state.id_type === 'biometric' ? [
       { fieldId: 'file_id_back',  label: 'ת"ז ביומטרית – צד אחורי',
-        value: state.id_back ? state.id_back.name : '—' }
+        value: state.id_back ? state.id_back.filename : '—' }
     ] : []),
     { fieldId: 'file_bank',       label: 'אישור ניהול חשבון / שיק מבוטל',
-      value: state.bank_doc ? state.bank_doc.name : '—' },
+      value: state.bank_doc ? state.bank_doc.filename : '—' },
     ...(needsPension ? [
       { fieldId: 'file_termination', label: 'אישור סיום עבודה',
-        value: state.termination_doc ? state.termination_doc.name : '—' },
+        value: state.termination_doc ? state.termination_doc.filename : '—' },
       { fieldId: 'file_form161',     label: 'טופס 161 / אישור מס הכנסה',
-        value: state.form161_doc ? state.form161_doc.name : '—' }
+        value: state.form161_doc ? state.form161_doc.filename : '—' }
     ] : []),
   ];
 
@@ -1077,16 +1115,16 @@ async function submitLead() {
   console.log('Product:', webhookPayload.product, '| ID type:', webhookPayload.id_type);
   console.log('Answers:', answers.map(a => `[${a.fieldId}] ${a.value}`).join(' | '));
   console.log('Docs:', {
-    id_front:        webhookPayload.documents.id_front   ? `✅ ${state.id_front?.name}`        : '❌',
+    id_front:        webhookPayload.documents.id_front        ? `✅ ${state.id_front?.filename}`        : '❌',
     id_back:         state.id_type === 'biometric'
-                       ? (webhookPayload.documents.id_back ? `✅ ${state.id_back?.name}` : '❌')
+                       ? (webhookPayload.documents.id_back    ? `✅ ${state.id_back?.filename}`  : '❌')
                        : 'N/A',
-    bank_document:   webhookPayload.documents.bank_document   ? `✅ ${state.bank_doc?.name}`        : '❌',
+    bank_document:   webhookPayload.documents.bank_document   ? `✅ ${state.bank_doc?.filename}`        : '❌',
     termination_doc: needsPension
-                       ? (webhookPayload.documents.termination_doc ? `✅ ${state.termination_doc?.name}` : '❌')
+                       ? (webhookPayload.documents.termination_doc ? `✅ ${state.termination_doc?.filename}` : '❌')
                        : 'N/A',
     form_161:        needsPension
-                       ? (webhookPayload.documents.form_161 ? `✅ ${state.form161_doc?.name}` : '❌')
+                       ? (webhookPayload.documents.form_161   ? `✅ ${state.form161_doc?.filename}` : '❌')
                        : 'N/A',
   });
 
@@ -1107,7 +1145,7 @@ async function submitLead() {
   try {
     emailjs.init(OFFICE_CONFIG.emailjs_public_key);
     const idBackLine = state.id_type === 'biometric'
-      ? 'ת"ז אחורי: '  + (state.id_back ? '✅ ' + state.id_back.name : '❌ חסר') + '\n'
+      ? 'ת"ז אחורי: '  + (state.id_back ? '✅ ' + state.id_back.filename : '❌ חסר') + '\n'
       : 'ת"ז אחורי: לא נדרש (ת"ז ישנה)\n';
 
     await emailjs.send(
@@ -1123,11 +1161,11 @@ async function submitLead() {
         id_type:  state.id_type === 'old' ? 'ת"ז ישנה' : 'ת"ז ביומטרית',
         notes:    notes   || '—',
         docs_list:
-            'ת"ז קדמי: '     + (state.id_front        ? '✅ ' + state.id_front.name        : '❌ חסר') + '\n'
+            'ת"ז קדמי: '     + (state.id_front        ? '✅ ' + state.id_front.filename        : '❌ חסר') + '\n'
           + idBackLine
-          + 'אישור חשבון: '  + (state.bank_doc         ? '✅ ' + state.bank_doc.name        : '❌ חסר') + '\n'
-          + (needsPension ? 'אישור סיום: '  + (state.termination_doc ? '✅ ' + state.termination_doc.name : '❌ חסר') + '\n' : '')
-          + (needsPension ? 'טופס 161: '    + (state.form161_doc     ? '✅ ' + state.form161_doc.name    : '❌ חסר') + '\n' : ''),
+          + 'אישור חשבון: '  + (state.bank_doc         ? '✅ ' + state.bank_doc.filename        : '❌ חסר') + '\n'
+          + (needsPension ? 'אישור סיום: '  + (state.termination_doc ? '✅ ' + state.termination_doc.filename : '❌ חסר') + '\n' : '')
+          + (needsPension ? 'טופס 161: '    + (state.form161_doc     ? '✅ ' + state.form161_doc.filename    : '❌ חסר') + '\n' : ''),
         sent_at:        new Date().toLocaleString('he-IL'),
         webhook_status: webhookOk ? 'נשלח בהצלחה' : 'שגיאה בשליחה',
       }
