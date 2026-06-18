@@ -94,8 +94,15 @@ body {
   background: white; padding: 4px;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 3px 14px rgba(29,95,212,0.5);
+  overflow: hidden;
 }
 .header-logo img { width: 38px; height: 38px; object-fit: contain; }
+#logo-fallback {
+  display: none;
+  width: 38px; height: 38px;
+  align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; color: var(--navy);
+}
 .header-text h1 { font-size: 17px; font-weight: 800; color: #fff; }
 .header-text p  { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 1px; }
 .online-dot {
@@ -406,7 +413,8 @@ textarea#userInput::placeholder { color: var(--text3); }
   <div class="header">
     <div class="header-row">
       <div class="header-logo">
-        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAeAB4AAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAC2AUIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAjooooAKKKKACiiigAooooAKKKKACiiigAooooAKKK+WP+Ctv/BSV/wCCXH7O+h/ED/hC/wDhOl1jxLB4dNh/bH9l+T5trdT+d5nkzZx9m27dozvzuG3DAH1PRX4m/wDEYgf+jdT/AOHAH/yur7T/ACCD/wBG6n/w4A/+V1faf/BIH/gsU/8AwVeHxEdPhyfAR8Af2Z8v/CQf2t/aH2v7XnpbQlNn2X0bd5nbbwAfb9FJnaBk9K+Gv+Cuv/BcDwj/AME1Na8P+Hl8LXHjvxzrtumpNoq3cun2+maf+0IO6tIqSiQqANsWVYsQAD7norxz9sX9vrwT+w54B8K+LfGya5D4Z8VanFpkWpWVmJY7F5YZZl+0bmXagWNiWAJGO+RXnf7PH/BX74OftGy+O30PXtU0qP4fWS6tqcuuWT6ek+ni1a5luLYyA+dGqwzBgvzBom4xzQB9XUV86fAb/gp18Hf2jvhH4j8beEvFkl74e8K6HN4lu5p9NuLaVtPijEklxFE6BpQqkEhclc8gV3Pwa/bK+GHx78F2HiHwt4w0PUdN1LS4NbgBl8i4/s+ZAyXMkEoWWOJgVIkZApDqcjcCQD1KiivF/+Cv8A/wAFwf8AhVP7OHga/wDhfq3/AAjGofE/w4t/qWnPMLu4u9NdI3MUXlxqYjOjh1kTzCqxhwpWXNAH2xRX59/8EiP+C5GoftBfsH+JPiX8cV0nQ9V+HviR9Bvdf020ksLbU5HitrqJxbNJM6HyrhlYK5jUxElhvCr9kfAr9uj4ZftHaH4g1DwX4q0/Wl8LWdrqeq2kJaG+sILpJHtnmtJQs6CWKGZl3KDSFAOR" alt="KD לוגו">
+        <img id="logo-img" src="https://drive.google.com/thumbnail?id=1RK62SzV7NeV0ke0qqFf_1vGmEbpCC4b-&sz=w80" alt="KD" onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='flex'"/>
+        <div id="logo-fallback">KD</div>
       </div>
       <div class="header-text">
         <h1>Kaplan & Dahan – פדיון חיסכון</h1>
@@ -715,7 +723,6 @@ function showIdTypeChoice() {
  
 function selectIdType(type) {
   state.id_type = type;
-  // ── איפוס מסמכי ת"ז קודמים בכל מקרה ──
   state.id_front = null;
   state.id_back  = null;
  
@@ -817,7 +824,6 @@ function handleFile(field, uid, input) {
   }
   const reader = new FileReader();
   reader.onload = e => {
-    // ── שמירה מאובטחת של הנתון ──
     const dataUrl = e.target.result;
     if (!dataUrl || !dataUrl.includes(',')) {
       alert('שגיאה בקריאת הקובץ. אנא נסה שנית.');
@@ -825,7 +831,6 @@ function handleFile(field, uid, input) {
     }
     state[field] = { name: file.name, dataUrl: dataUrl, type: file.type };
  
-    // ── עדכון UI ──
     const card = document.getElementById(uid+'_card');
     if (card) card.classList.add('has-file');
     const zone = document.getElementById(uid+'_zone');
@@ -838,17 +843,14 @@ function handleFile(field, uid, input) {
         <span class="fp-remove" onclick="removeFile('${field}','${uid}')">✕</span>
       </div>`;
  
-    // ── מעבר לשלב הבא רק אחרי שהנתון נשמר ──
     console.log('File saved:', field, '| name:', file.name, '| state ok:', !!state[field]);
  
     setTimeout(() => {
       if (field === 'id_front') {
         if (state.id_type === 'old') {
-          // ת"ז ישנה – צד אחורי לא נדרש
           state.id_back = null;
           step3_bank();
         } else {
-          // ת"ז ביומטרית – צריך גם צד אחורי
           step2_idBack();
         }
       } else if (field === 'id_back') {
@@ -1001,7 +1003,6 @@ async function submitLead() {
   }
   if (!consent) { showErr('consent', 'יש לאשר את התנאים'); ok = false; }
  
-  // ── בדיקת מסמכים לפי סוג ת"ז ומוצר ──
   const needsPension = state.product === 'קרן פנסיה' || state.product === 'ביטוח מנהלים';
   const missingDocs = [];
  
@@ -1023,7 +1024,6 @@ async function submitLead() {
  
   document.getElementById('sendingOverlay').classList.add('show');
  
-  // ── docPayload מוגן ──
   function docPayload(docObj) {
     if (!docObj || !docObj.dataUrl) return null;
     const parts = docObj.dataUrl.split(',');
@@ -1038,7 +1038,6 @@ async function submitLead() {
     };
   }
  
-  // ── בניית payload לפי סוג ת"ז ומוצר ──
   const webhookPayload = {
     submitted_at: new Date().toISOString(),
     source: 'pedion-chatbot',
@@ -1059,7 +1058,6 @@ async function submitLead() {
     }
   };
  
-  // ── לוג לדיבאג ──
   console.log('=== WEBHOOK PAYLOAD SUMMARY ===');
   console.log('Product:', webhookPayload.product);
   console.log('ID Type:', webhookPayload.id_type);
@@ -1071,7 +1069,6 @@ async function submitLead() {
     form_161:        webhookPayload.documents.form_161 !== null ? !!webhookPayload.documents.form_161 : 'לא רלוונטי',
   });
  
-  // ── שליחה ל-Webhook ──
   let webhookOk = false;
   try {
     const res = await fetch(OFFICE_CONFIG.webhook_url, {
@@ -1086,7 +1083,6 @@ async function submitLead() {
     console.error('Webhook error:', e);
   }
  
-  // ── EmailJS fallback ──
   try {
     emailjs.init(OFFICE_CONFIG.emailjs_public_key);
     const idBackLine = state.id_type === 'biometric'
@@ -1117,7 +1113,6 @@ async function submitLead() {
     );
   } catch(e) { console.warn('EmailJS error:', e); }
  
-  // ── הצגת מסך הצלחה ──
   document.getElementById('sendingOverlay').classList.remove('show');
   document.getElementById('messages').style.display   = 'none';
   document.getElementById('qrWrap').style.display     = 'none';
