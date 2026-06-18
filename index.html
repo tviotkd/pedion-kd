@@ -1053,6 +1053,7 @@ async function submitLead() {
     submitted_at: new Date().toISOString(),
     source:       'pedion-chatbot',
     product:      state.product,
+    id_number:    idNum,
     id_type:      state.id_type === 'old' ? 'ת"ז ישנה' : 'ת"ז ביומטרית',
     // ── פרטים אישיים + שמות קבצים ──
     answers,
